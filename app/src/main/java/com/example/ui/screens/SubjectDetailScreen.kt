@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material3.Button
@@ -44,7 +46,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -58,6 +59,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -108,9 +110,13 @@ fun SubjectDetailScreen(
         // Top Header
         Surface(
             color = MaterialTheme.colorScheme.surface,
-            shadowElevation = 2.dp
+            shadowElevation = 1.dp
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -121,7 +127,8 @@ fun SubjectDetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back to Batches"
+                            contentDescription = "Back to Batches",
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -131,13 +138,13 @@ fun SubjectDetailScreen(
                             Text(
                                 text = subject.title,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontWeight = FontWeight.ExtraBold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Text(
                             text = "${subject.chapters.size} Chapters · Faculty: ${subject.facultyName}",
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -148,7 +155,7 @@ fun SubjectDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .horizontalScroll(rememberScrollState())
-                        .padding(top = 4.dp, bottom = 4.dp),
+                        .padding(top = 4.dp, bottom = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     batch.subjects.forEach { s ->
@@ -156,6 +163,10 @@ fun SubjectDetailScreen(
                         Surface(
                             shape = RoundedCornerShape(20.dp),
                             color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                            border = androidx.compose.foundation.BorderStroke(
+                                1.dp,
+                                if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                            ),
                             modifier = Modifier.clickable { viewModel.openSubject(s) }
                         ) {
                             Row(
@@ -202,7 +213,7 @@ fun SubjectDetailScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
             contentPadding = PaddingValues(vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(filteredChapters) { chapter ->
                 val isExpanded = expandedChapterId == chapter.id
@@ -254,10 +265,14 @@ fun ChapterCardItem(
         modifier = Modifier
             .fillMaxWidth()
             .testTag("chapter_item_${chapter.number}"),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (chapter.isFeatured) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            containerColor = if (chapter.isFeatured) MaterialTheme.colorScheme.surfaceVariant
             else MaterialTheme.colorScheme.surface
+        ),
+        border = androidx.compose.foundation.BorderStroke(
+            if (chapter.isFeatured) 1.5.dp else 1.dp,
+            if (chapter.isFeatured) Color(0xFFF59E0B) else MaterialTheme.colorScheme.outline
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isExpanded) 3.dp else 1.dp)
     ) {
@@ -267,20 +282,20 @@ fun ChapterCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onToggleExpand() }
-                    .padding(14.dp),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    modifier = Modifier.size(36.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    color = if (chapter.isFeatured) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primaryContainer
+                    modifier = Modifier.size(38.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    color = if (chapter.isFeatured) Color(0xFFF59E0B) else MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = String.format("%02d", chapter.number),
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Black,
                             fontSize = 13.sp,
-                            color = if (chapter.isFeatured) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+                            color = if (chapter.isFeatured) Color(0xFF451A03) else MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -302,10 +317,10 @@ fun ChapterCardItem(
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = "${chapter.lectures.size} Lectures",
+                            text = "${chapter.lectures.size} Video Lectures",
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "· Notes & DPPs",
@@ -315,13 +330,13 @@ fun ChapterCardItem(
                         if (chapter.isFeatured) {
                             Surface(
                                 shape = RoundedCornerShape(4.dp),
-                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)
+                                color = Color(0xFFF59E0B).copy(alpha = 0.2f)
                             ) {
                                 Text(
-                                    text = "UPDATED",
+                                    text = "10 VIDEOS",
                                     fontSize = 9.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.secondary,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color(0xFFD97706),
                                     modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
                                 )
                             }
@@ -350,7 +365,7 @@ fun ChapterCardItem(
                 ) {
                     if (chapter.lectures.isEmpty()) {
                         Text(
-                            text = "Lectures for this chapter are scheduled soon.",
+                            text = "Lectures for this chapter are being synchronized.",
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(vertical = 12.dp)
@@ -363,10 +378,11 @@ fun ChapterCardItem(
 
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(12.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
-                                )
+                                    containerColor = MaterialTheme.colorScheme.surface
+                                ),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                             ) {
                                 Column(modifier = Modifier.padding(12.dp)) {
                                     Row(
@@ -392,19 +408,29 @@ fun ChapterCardItem(
                                                 color = MaterialTheme.colorScheme.onSurface
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
-                                            Text(
-                                                text = "${lecture.duration} · ${lecture.faculty}",
-                                                fontSize = 11.sp,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
-                                            if (lecture.description.isNotEmpty()) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                            ) {
                                                 Text(
-                                                    text = lecture.description,
-                                                    fontSize = 10.sp,
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                                                    maxLines = 2,
-                                                    overflow = TextOverflow.Ellipsis
+                                                    text = "${lecture.duration} · ${lecture.faculty}",
+                                                    fontSize = 11.sp,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                                 )
+                                                if (isDownloaded) {
+                                                    Surface(
+                                                        shape = RoundedCornerShape(4.dp),
+                                                        color = MaterialTheme.colorScheme.primaryContainer
+                                                    ) {
+                                                        Text(
+                                                            text = "OFFLINE ✓",
+                                                            fontSize = 9.sp,
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -423,7 +449,10 @@ fun ChapterCardItem(
                                             Spacer(modifier = Modifier.height(2.dp))
                                             LinearProgressIndicator(
                                                 progress = { downloadProgress / 100f },
-                                                modifier = Modifier.fillMaxWidth().height(4.dp),
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(4.dp)
+                                                    .clip(RoundedCornerShape(2.dp)),
                                                 color = MaterialTheme.colorScheme.primary
                                             )
                                         }
@@ -445,7 +474,9 @@ fun ChapterCardItem(
                                             ),
                                             shape = RoundedCornerShape(8.dp),
                                             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
-                                            modifier = Modifier.weight(1.3f).testTag("play_phone_player_${lecture.id}")
+                                            modifier = Modifier
+                                                .weight(1.3f)
+                                                .testTag("play_phone_player_${lecture.id}")
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.OpenInNew,
@@ -477,7 +508,9 @@ fun ChapterCardItem(
                                             onClick = { onDownload(lecture) },
                                             shape = RoundedCornerShape(8.dp),
                                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
-                                            modifier = Modifier.weight(1f).testTag("download_btn_${lecture.id}")
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .testTag("download_btn_${lecture.id}")
                                         ) {
                                             if (isDownloaded) {
                                                 Icon(
@@ -502,31 +535,54 @@ fun ChapterCardItem(
 
                                     // Material files (Notes & DPP)
                                     if (lecture.notesUrl != null || lecture.dppUrl != null) {
-                                        Spacer(modifier = Modifier.height(6.dp))
+                                        Spacer(modifier = Modifier.height(8.dp))
                                         Row(
-                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                                         ) {
                                             lecture.notesUrl?.let { notes ->
-                                                Text(
-                                                    text = "📄 Lecture Notes PDF",
-                                                    fontSize = 11.sp,
-                                                    fontWeight = FontWeight.SemiBold,
-                                                    color = MaterialTheme.colorScheme.primary,
-                                                    modifier = Modifier
-                                                        .clickable { onOpenDocument(notes, "${lecture.title} Notes") }
-                                                        .padding(vertical = 2.dp)
-                                                )
+                                                Surface(
+                                                    shape = RoundedCornerShape(6.dp),
+                                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                                    modifier = Modifier.clickable { onOpenDocument(notes, "${lecture.title} Notes") }
+                                                ) {
+                                                    Row(
+                                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Icon(
+                                                            imageVector = Icons.Default.PictureAsPdf,
+                                                            contentDescription = null,
+                                                            tint = MaterialTheme.colorScheme.primary,
+                                                            modifier = Modifier.size(12.dp)
+                                                        )
+                                                        Spacer(modifier = Modifier.width(4.dp))
+                                                        Text(
+                                                            text = "Notes PDF",
+                                                            fontSize = 11.sp,
+                                                            fontWeight = FontWeight.SemiBold,
+                                                            color = MaterialTheme.colorScheme.primary
+                                                        )
+                                                    }
+                                                }
                                             }
                                             lecture.dppUrl?.let { dpp ->
-                                                Text(
-                                                    text = "📝 DPP Homework",
-                                                    fontSize = 11.sp,
-                                                    fontWeight = FontWeight.SemiBold,
-                                                    color = MaterialTheme.colorScheme.secondary,
-                                                    modifier = Modifier
-                                                        .clickable { onOpenDocument(dpp, "${lecture.title} DPP") }
-                                                        .padding(vertical = 2.dp)
-                                                )
+                                                Surface(
+                                                    shape = RoundedCornerShape(6.dp),
+                                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                                    modifier = Modifier.clickable { onOpenDocument(dpp, "${lecture.title} DPP") }
+                                                ) {
+                                                    Row(
+                                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Text(
+                                                            text = "📝 DPP Sheet",
+                                                            fontSize = 11.sp,
+                                                            fontWeight = FontWeight.SemiBold,
+                                                            color = MaterialTheme.colorScheme.secondary
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
                                     }

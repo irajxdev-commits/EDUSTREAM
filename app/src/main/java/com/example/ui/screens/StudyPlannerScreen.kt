@@ -2,7 +2,9 @@ package com.example.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,16 +19,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.SelfImprovement
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,6 +64,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.StudyTask
 import com.example.ui.MainViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun StudyPlannerScreen(
@@ -87,40 +97,131 @@ fun StudyPlannerScreen(
             .fillMaxSize()
             .testTag("study_planner_screen"),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Top Header
         item {
             Column {
-                Text(
-                    text = "STUDY PLANNER",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.secondary,
-                    letterSpacing = 1.sp
-                )
-                Text(
-                    text = "Roz thoda, regular study",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    text = "Date: $selectedDate",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "DAILY RHYTHM",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = MaterialTheme.colorScheme.primary,
+                            letterSpacing = 1.sp
+                        )
+                        Text(
+                            text = "Daily Study Planner",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Black,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    ) {
+                        Text(
+                            text = "$overallDone / $overallTotal Done",
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
             }
         }
 
-        // 5 Simple Rules Card (From original study.html)
+        // 7-Day Interactive Horizontal Strip
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(
+                        text = "Calendar Week",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        val calendar = Calendar.getInstance()
+                        val sdfDay = SimpleDateFormat("EEE", Locale.getDefault())
+                        val sdfDate = SimpleDateFormat("dd", Locale.getDefault())
+                        val sdfFull = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+                        // Center around today
+                        calendar.add(Calendar.DAY_OF_YEAR, -2)
+                        for (i in 0..6) {
+                            val curDate = calendar.time
+                            val fullString = sdfFull.format(curDate)
+                            val isSelected = fullString == selectedDate
+                            val dayLabel = sdfDay.format(curDate)
+                            val dateNum = sdfDate.format(curDate)
+
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                                border = androidx.compose.foundation.BorderStroke(
+                                    1.dp,
+                                    if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                                ),
+                                modifier = Modifier
+                                    .width(46.dp)
+                                    .clickable { viewModel.setPlannerDate(fullString) }
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(vertical = 8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = dayLabel.uppercase(),
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Text(
+                                        text = dateNum,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+                            calendar.add(Calendar.DAY_OF_YEAR, 1)
+                        }
+                    }
+                }
+            }
+        }
+
+        // 5 Simple Rules of Focus Card
         item {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { showRules = !showRules },
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(
@@ -129,13 +230,21 @@ fun StudyPlannerScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Default.Lightbulb,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
+                                modifier = Modifier.size(30.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.Spa,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.secondary,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = "Padhai Se Pehle — 5 Simple Rules",
                                 fontSize = 13.sp,
@@ -152,17 +261,17 @@ fun StudyPlannerScreen(
 
                     AnimatedVisibility(visible = showRules) {
                         Column(
-                            modifier = Modifier.padding(top = 10.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                            modifier = Modifier.padding(top = 12.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text("1. Baitho — Ek quiet jagah par comfortably baith jao.", fontSize = 12.sp)
-                            Text("2. 😌 Eyes Close — Normal breath lo, focus karo, 2 baar repeat.", fontSize = 12.sp)
-                            Text("3. 🎯 Focus Mode ON — Mind ko calm karke start karo.", fontSize = 12.sp)
-                            Text("4. ⏸️ Breaks Lo — Break zaroor lo, but Shorts/Reels nahi! 📵", fontSize = 12.sp)
-                            Text("5. 🚶 Refresh — Paani piyo, walk karo, phir wapas padhai par.", fontSize = 12.sp)
+                            RuleStepRow("1", "Baitho", "Ek quiet jagah par comfortably baith jao.")
+                            RuleStepRow("2", "Eyes Close", "Normal breath lo, 2 deep calm breaths repeat karo.")
+                            RuleStepRow("3", "Focus Mode ON", "Multitasking band, sirf ek lecture par focus.")
+                            RuleStepRow("4", "Strategic Breaks", "Break lo, par Shorts/Reels scroll mat karo!")
+                            RuleStepRow("5", "Refresh & Return", "Paani piyo, stretch karo, phir target poora karo.")
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Bas itna: Pehle mind ko calm karo, phir mind ko kaam do. ❤️‍🔥",
+                                text = "✨ Pehle mind ko calm karo, phir mind ko kaam do. ❤️‍🔥",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
@@ -173,105 +282,114 @@ fun StudyPlannerScreen(
             }
         }
 
-        // Daily Progress Bar
+        // Daily Target Progress Ring Card
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Column {
+                            Text(
+                                text = "Today's Target Completion",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "$overallDone of $overallTotal goals achieved",
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                         Text(
-                            text = "Today's Target Progress",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "$overallDone / $overallTotal targets ($progressPercent%)",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
+                            text = "$progressPercent%",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     LinearProgressIndicator(
                         progress = { progressPercent / 100f },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(8.dp)
                             .clip(RoundedCornerShape(4.dp)),
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant
                     )
                 }
             }
         }
 
-        // Question Practice Tracker
+        // Question Practice Target Stepper
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Question Practice Target",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+                Column(modifier = Modifier.padding(16.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
                             Text(
-                                text = "$questionsDone of $questionTarget questions solved",
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.primary
+                                text = "Question Practice Target",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "Consistent numerical practice wins board exams",
-                                fontSize = 11.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                text = "$questionsDone of $questionTarget questions solved",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(
                                 onClick = { viewModel.decrementQuestionsCompleted() },
-                                modifier = Modifier.size(34.dp)
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                             ) {
-                                Icon(Icons.Default.Remove, contentDescription = "Decrease")
+                                Icon(Icons.Default.Remove, contentDescription = "Decrease", modifier = Modifier.size(16.dp))
                             }
                             Surface(
-                                shape = RoundedCornerShape(6.dp),
+                                shape = RoundedCornerShape(8.dp),
                                 color = MaterialTheme.colorScheme.primaryContainer,
-                                modifier = Modifier.padding(horizontal = 4.dp)
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             ) {
                                 Text(
                                     text = "$questionsDone",
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                 )
                             }
                             IconButton(
                                 onClick = { viewModel.incrementQuestionsCompleted() },
-                                modifier = Modifier.size(34.dp)
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                             ) {
-                                Icon(Icons.Default.Add, contentDescription = "Increase")
+                                Icon(Icons.Default.Add, contentDescription = "Increase", modifier = Modifier.size(16.dp))
                             }
                         }
                     }
@@ -302,7 +420,7 @@ fun StudyPlannerScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -312,9 +430,9 @@ fun StudyPlannerScreen(
                         value = newLectureInput,
                         onValueChange = { newLectureInput = it },
                         modifier = Modifier.weight(1f).testTag("new_lecture_input"),
-                        placeholder = { Text("Add a lecture (e.g. Ray Optics Lec 03)", fontSize = 12.sp) },
+                        placeholder = { Text("Add a lecture (e.g. Ray Optics Lec 04)", fontSize = 12.sp) },
                         singleLine = true,
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(12.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -325,21 +443,20 @@ fun StudyPlannerScreen(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.testTag("add_lecture_btn")
                     ) {
-                        Text("Add")
+                        Text("Add", fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
 
-        // Tasks List
         val lectureTasks = tasks.filter { it.category == "LECTURE" }
         if (lectureTasks.isEmpty()) {
             item {
                 Text(
-                    text = "No lectures added yet for today.",
+                    text = "No lectures added yet for this date.",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -377,7 +494,7 @@ fun StudyPlannerScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -389,7 +506,7 @@ fun StudyPlannerScreen(
                         modifier = Modifier.weight(1f).testTag("new_chapter_input"),
                         placeholder = { Text("Add chapter revision target", fontSize = 12.sp) },
                         singleLine = true,
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(12.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -400,10 +517,10 @@ fun StudyPlannerScreen(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.testTag("add_chapter_btn")
                     ) {
-                        Text("Add")
+                        Text("Add", fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -431,6 +548,44 @@ fun StudyPlannerScreen(
 }
 
 @Composable
+fun RuleStepRow(num: String, title: String, detail: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = Modifier.size(22.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text(
+                    text = num,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Black,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = detail,
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 15.sp
+            )
+        }
+    }
+}
+
+@Composable
 fun TaskRowItem(
     task: StudyTask,
     onToggle: () -> Unit,
@@ -438,11 +593,12 @@ fun TaskRowItem(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (task.isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             else MaterialTheme.colorScheme.surface
-        )
+        ),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier

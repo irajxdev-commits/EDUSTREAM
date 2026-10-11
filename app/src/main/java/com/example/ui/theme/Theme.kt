@@ -12,47 +12,49 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = MintAccent,
-    onPrimary = Color(0xFF06201B),
-    primaryContainer = Color(0xFF153F38),
-    onPrimaryContainer = Color(0xFFD5F3E8),
-    secondary = DarkOrange,
-    onSecondary = Color(0xFF3C1400),
-    secondaryContainer = Color(0xFF4A2810),
-    onSecondaryContainer = Color(0xFFFFDBC8),
-    tertiary = AccentYellow,
-    background = DarkBackground,
-    surface = DarkSurface,
-    surfaceVariant = DarkSurfaceVariant,
+    primary = MintGlow,
+    onPrimary = Color(0xFF03281E),
+    primaryContainer = Color(0xFF064E3B),
+    onPrimaryContainer = Color(0xFFA7F3D0),
+    secondary = SolarAmber,
+    onSecondary = Color(0xFF451A03),
+    secondaryContainer = Color(0xFF78350F),
+    onSecondaryContainer = Color(0xFFFEF3C7),
+    tertiary = SkyCyan,
+    background = DarkCanvas,
+    surface = DarkCardSurface,
+    surfaceVariant = DarkCardElevated,
     onBackground = DarkInkPrimary,
     onSurface = DarkInkPrimary,
-    onSurfaceVariant = DarkInkMuted,
-    outline = DarkLineBorder
+    onSurfaceVariant = DarkInkSecondary,
+    outline = DarkBorderSubtle,
+    outlineVariant = DarkBorderFocus
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = ForestGreen,
+    primary = EmeraldDark,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFD4E8E1),
-    onPrimaryContainer = Color(0xFF092923),
-    secondary = AmberOrange,
+    primaryContainer = MintSoft,
+    onPrimaryContainer = Color(0xFF064E3B),
+    secondary = TangerineAccent,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFFFE0D0),
-    onSecondaryContainer = Color(0xFF381400),
-    tertiary = AccentYellow,
-    background = CreamBackground,
-    surface = CreamSurface,
-    surfaceVariant = CreamSurfaceVariant,
-    onBackground = InkPrimary,
-    onSurface = InkPrimary,
-    onSurfaceVariant = InkMuted,
-    outline = LineBorder
+    secondaryContainer = Color(0xFFFFEDD5),
+    onSecondaryContainer = Color(0xFF7C2D12),
+    tertiary = ElectricIndigo,
+    background = LightCanvas,
+    surface = LightCardSurface,
+    surfaceVariant = LightCardElevated,
+    onBackground = LightInkPrimary,
+    onSurface = LightInkPrimary,
+    onSurfaceVariant = LightInkSecondary,
+    outline = LightBorderSubtle,
+    outlineVariant = LightBorderFocus
 )
 
 @Composable
 fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Set false to preserve our bespoke Padho Bhai brand identity
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

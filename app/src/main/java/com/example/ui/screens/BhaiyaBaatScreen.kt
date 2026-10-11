@@ -3,6 +3,7 @@ package com.example.ui.screens
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -62,7 +65,7 @@ fun BhaiyaBaatScreen(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
@@ -70,51 +73,52 @@ fun BhaiyaBaatScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            Brush.verticalGradient(
+                            Brush.linearGradient(
                                 listOf(
-                                    Color(0xFF183E36),
-                                    Color(0xFF287D64)
+                                    Color(0xFF091F26),
+                                    Color(0xFF133F39),
+                                    Color(0xFF0C241E)
                                 )
                             )
                         )
-                        .padding(20.dp)
+                        .padding(22.dp)
                 ) {
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Surface(
                                 shape = CircleShape,
-                                color = Color(0xFFF5D46D),
-                                modifier = Modifier.size(36.dp)
+                                color = Color(0xFFF59E0B),
+                                modifier = Modifier.size(38.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text("👑", fontSize = 18.sp)
                                 }
                             }
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(
-                                    text = "Raj Bhaiya ki taraf se",
+                                    text = "RAJ BHAIYA KI TARAF SE",
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.ExtraBold,
-                                    color = Color(0xFFF5D46D),
+                                    color = Color(0xFFF59E0B),
                                     letterSpacing = 1.sp
                                 )
                                 Text(
-                                    text = "PADHO BHAI Mentorship",
+                                    text = "Padho Bhai Mentorship Space",
                                     fontSize = 13.sp,
-                                    color = Color.White.copy(alpha = 0.8f)
+                                    color = Color.White.copy(alpha = 0.85f)
                                 )
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
                             text = "Arre dost,\naaj phir se shuru karte hain.",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Black,
                             color = Color.White,
-                            lineHeight = 28.sp
+                            lineHeight = 30.sp
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -123,17 +127,23 @@ fun BhaiyaBaatScreen(
                             text = "Main Raj Bhaiya. Pressure lene nahi, saath chalne aaya hoon. Aaj bas ek chhota target pakad, usse poora kar, phir khud ko shabashi de.",
                             fontSize = 13.sp,
                             color = Color.White.copy(alpha = 0.9f),
-                            lineHeight = 18.sp
+                            lineHeight = 19.sp
                         )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                        Text(
-                            text = "⭐ Yaad rakh: Speed se zyada zaroori hai wapas aana.",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFF5D46D)
-                        )
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color.White.copy(alpha = 0.12f)
+                        ) {
+                            Text(
+                                text = "⭐ Yaad rakh: Speed se zyada zaroori hai wapas aana.",
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFFDE68A)
+                            )
+                        }
                     }
                 }
             }
@@ -143,13 +153,14 @@ fun BhaiyaBaatScreen(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(18.dp)) {
                     Text(
-                        text = "01 / Bhaiya ki baat",
+                        text = "01 / BHAIYA KI BAAT",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.secondary,
@@ -158,7 +169,7 @@ fun BhaiyaBaatScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Tujhe sab kuch aaj hi nahi karna.",
-                        fontSize = 17.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -169,13 +180,19 @@ fun BhaiyaBaatScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 18.sp
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "🔥 Comparison band, progress chalu. Tera pace tera hai.",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    ) {
+                        Text(
+                            text = "🔥 Comparison band, progress chalu. Tera pace tera hai.",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                        )
+                    }
                 }
             }
         }
@@ -184,13 +201,14 @@ fun BhaiyaBaatScreen(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(18.dp)) {
                     Text(
-                        text = "02 / Aaj ka formula",
+                        text = "02 / AAJ KA FORMULA",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.secondary,
@@ -199,114 +217,143 @@ fun BhaiyaBaatScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "Bas itna kar, dost:",
-                        fontSize = 17.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     RoutineStepItem("01", "Ek lecture dhyaan se dekh", "Notes mein sirf kaam ki baat likh. Har line copy karne ki zaroorat nahi.")
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     RoutineStepItem("02", "Kuch questions khud solve kar", "Answer dekhne se pehle ek honest try. Galat attempt bhi progress hai.")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    RoutineStepItem("03", "Kal ka next step likh de", "Chapter, lecture ya revision—subah decide nahi karna padega.")
+                    Spacer(modifier = Modifier.height(10.dp))
+                    RoutineStepItem("03", "Kal ka next step likh de", "Chapter, lecture ya revision—subah decide nahi karna padega pehle se ready.")
                 }
             }
         }
 
-        // Telegram Community Join Card
+        // Telegram Community Join Card (Global Grade Gradient)
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF0088CC))
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF0088CC)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.linearGradient(
+                                listOf(
+                                    Color(0xFF0088CC),
+                                    Color(0xFF006699),
+                                    Color(0xFF004C73)
+                                )
+                            )
+                        )
+                        .padding(20.dp)
+                ) {
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Surface(
+                                shape = CircleShape,
+                                color = Color.White.copy(alpha = 0.2f),
+                                modifier = Modifier.size(42.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.Send,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = "Join Our Telegram Community!",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                                Text(
+                                    text = "Get real-time updates, lecture links & student discussions",
+                                    fontSize = 12.sp,
+                                    color = Color.White.copy(alpha = 0.85f)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+AyTW4CI3xZpjZWFl"))
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp)
+                                .testTag("join_telegram_btn")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.OpenInNew,
+                                contentDescription = null,
+                                tint = Color(0xFF0088CC),
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "Open Telegram Group (Join Now)",
+                                color = Color(0xFF0088CC),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Phone Video Players Info Card
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Surface(
-                            shape = CircleShape,
-                            color = Color.White.copy(alpha = 0.2f),
-                            modifier = Modifier.size(38.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier.size(28.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
-                                    imageVector = Icons.Default.Chat,
+                                    imageVector = Icons.Default.Videocam,
                                     contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.size(16.dp)
                                 )
                             }
                         }
                         Spacer(modifier = Modifier.width(10.dp))
-                        Column {
-                            Text(
-                                text = "Join Our Telegram Community!",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                            Text(
-                                text = "Instant lecture updates, DPP solutions & discussions",
-                                fontSize = 12.sp,
-                                color = Color.White.copy(alpha = 0.85f)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Button(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+AyTW4CI3xZpjZWFl"))
-                            context.startActivity(intent)
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier.fillMaxWidth().testTag("join_telegram_btn")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.OpenInNew,
-                            contentDescription = null,
-                            tint = Color(0xFF0088CC),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "Open Telegram Group",
-                            color = Color(0xFF0088CC),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-        }
-
-        // Help: Phone Video Players info
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "How to play in phone video players:",
-                            fontSize = 13.sp,
+                            text = "Phone Video Players & Downloads Guide",
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "1. Tap 'Play in Player' on any lecture or in Downloads.\n2. Choose your favourite app: VLC Player, MX Player, Google Photos, or phone's Video Player.\n3. Enjoy background playback, custom gestures, subtitle support, and offline learning without data cost!",
+                        text = "1. Downloaded lectures are saved directly in your phone storage under standard MP4 format.\n2. Tap 'Play in Player' to launch VLC Player, MX Player, or your phone's default video player.\n3. Take advantage of custom speed playback (0.5x to 2x), background audio, and zero-buffering study sessions!",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 17.sp
@@ -324,32 +371,32 @@ fun RoutineStepItem(num: String, title: String, description: String) {
         verticalAlignment = Alignment.Top
     ) {
         Surface(
-            shape = RoundedCornerShape(6.dp),
+            shape = RoundedCornerShape(8.dp),
             color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(32.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = num,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = description,
-                fontSize = 11.sp,
+                fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 15.sp
+                lineHeight = 16.sp
             )
         }
     }
