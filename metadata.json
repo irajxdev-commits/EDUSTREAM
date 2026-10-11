@@ -1,0 +1,6 @@
+{
+  "name": "Padho Bhai",
+  "description": "Educational platform with batch courses, organized video folders, download management, study planner, and phone video player support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
